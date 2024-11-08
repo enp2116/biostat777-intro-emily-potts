@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I’m currently a first-year PhD student in Biostatistics at Johns Hopkins University, where I aim to address statistical challenges in the measurement of neurological and psychiatric disorders. I hold an MS in Biostatistics from Columbia University and a BA in Mathematics and Statistics from Vassar College.\nMy previous research has focused on patient safety and trial outcomes in early-phase trials, particularly phase II trials in oncology. I have also completed internships across diverse fields, including statistical genetics, pharmaceutical statistics, and social justice research. Most recently, I worked for the Biostatistics, Epidemiology, and Research Design (BERD) resource at Columbia University Irving Medical Center, where I fostered a passion for translational education. I enjoy teaching and have previously led teaching assistant efforts for courses in biostatistics, public health, and aging at Columbia University.\nThroughout my academic journey, I have been honored to be involved as a QuestBridge Scholar, Columbia Tow Doctoral Scholar, and member of the Delta Omega Honorary Society. Coming from a first-generation, low-income background, I am committed to supporting others through STEM mentorship."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Emily Potts",
+    "section": "",
+    "text": "Welcome! My name is Emily (she/her) and I’m a first-year PhD student in Biostatistics at the Johns Hopkins Bloomberg School of Public Health. In my free time, I enjoy tumbling and spending time in nature!\n(Add video)"
+  },
+  {
+    "objectID": "Example_Analysis.html",
+    "href": "Example_Analysis.html",
+    "title": "Example Analysis",
+    "section": "",
+    "text": "A data analysis page called ‘Example analysis’. You can pick any dataset you wish you analyze. In this webpage, you will analyze a dataset and summarize the results. The requirements for this webpage are the following:\nQuestion: You must describe what is the question you aim to answer with the data and data analysis.\nAudience: You must describe who is the intended audience for the data analysis.\n\nThe intended audience is residents of Baltimore or anyone who is interested in the environmental trends.\n\nData Source: You must describe and link to where the original data come from that you chose.\n\nhttps://p8105.com/data/202409%20Trash%20Wheel%20Collection%20Data.xlsx\n\nData Dictionary: You must include a link to a data dictionary for the data or create one inside the webpage.\nData Wrangling: Your analysis must include some minimal form of data wrangling with you using at least five different functions from dplyr or tidyr.\nMethods:\n\nYour analysis must include one image or table (not one you created yourself, but one you have saved locally or one from the web).\nYour analysis must include at least two different callout blocks.\nYour analysis must include the use of at least 1 margin content.\n\nData Visualization:\n\nYour analysis should include at least three plots with you using at least three different geom_*() functions from ggplot2 (or another package with geom_*() functions).\nPlots should have titles, subtitles, captions, and human-understandable axis labels.\nAt least one plot should using a type of faceting (facet_grid() or facet_wrap()).\n\nList of functions: At the end of the data analysis, list out each of the functions you used from each of the packages (dplyr, tidyr, and ggplot2) to help the TA with respect to making sure you met all the requirements described above.\nDiscussion: You must summarize your analysis and/or results with a paragraph (4-6 sentences).\nBibliography: Your analysis must include a .bib file, which you use to reference at least three unique citations. For example, it could be to a website or paper from where the original data came from or it could be to a paper describing a method you are using to analyze the data."
+  }
+]

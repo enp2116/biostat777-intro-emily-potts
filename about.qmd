@@ -1,0 +1,7 @@
+---
+title: "About"
+---
+
+Hi! I'm Emily Potts, a first-year PhD student in Biostatistics at Johns Hopkins University. I hold an MS in Biostatistics from Columbia University and a BA in Mathematics and Statistics from Vassar College. My research interests include latent variable modeling, causal inference, and longitudinal data analysis. In my doctoral studies, I hope to address statistical challenges in the measurement of neurological and psychiatric disorders.
+
+At Columbia, my research focused on patient safety and trial outcomes in early-phase trials, particularly phase II trials in oncology. I have also completed internships in statistical genetics at Boston University, pharmaceutical statistics at Regeneron, and social justice research at AB Partners. Most recently, I worked with the Biostatistics, Epidemiology, and Research Design resource at Columbia University Irving Medical Center, where I cultivated a strong commitment to translational education. I am also passionate about STEM mentorship and outreach, especially focused on supporting fellow FGLI students.
