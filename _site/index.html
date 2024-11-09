@@ -39,6 +39,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -98,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./Example_Analysis.html"> 
-<span class="menu-text">Data Analysis</span></a>
+<span class="menu-text">Example Analysis</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -136,12 +138,24 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="Potts_Hopkins_headshot.JPG" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:30.0%"></p>
-</figure>
+<p><img src="Potts_Hopkins_headshot.JPG" class="img-fluid" style="width:40.0%"></p>
+<p>Hi! My name is Emily and I’m a first-year PhD student in Biostatistics at the Johns Hopkins Bloomberg School of Public Health. In my free time, I enjoy spending time in nature and tumbling!</p>
+<div>
+
 </div>
-<p>Welcome! My name is Emily (she/her) and I’m a first-year PhD student in Biostatistics at the Johns Hopkins Bloomberg School of Public Health. In my free time, I enjoy tumbling and spending time in nature!</p>
+<div class="quarto-layout-panel" style="display: flex; justify-content: space-around; align-items: center;" data-layout-ncol="3" data-layout-nrow="1">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="nature.HEIC" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="tumble.mov"></video></div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="dog.JPG" class="img-fluid"></p>
+</div>
+</div>
+</div>
 
 
 
@@ -238,7 +252,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/epotts5\.quarto\.pub\/emily-potts");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -567,6 +581,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

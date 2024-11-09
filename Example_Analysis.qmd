@@ -1,18 +1,18 @@
 ---
-title: "Data Analysis"
+title: "Example Analysis"
 format:
   html:
     code-fold: true
 bibliography: reference.bib
 ---
 
-![](trashwheel.jpeg){fig-align="center" width="800"}
+![](professor.jpeg){fig-align="center" width="800"}
 
 ### Introduction
 
 In 2014, the city of Baltimore created the first trash interceptor, named Mr. Trash Wheel, to clean up pollution in its waterways [@mrtrashwheel]. The key idea is that the semi-automatic interceptor collects pollutants and prevents them from migrating into the Chesapeake Bay. The trash are incinerated and then converted into electricity, which are used to power homes in Maryland. In the last decade, over a million pounds of debris have been collected.
 
-In its success, the Mr. Trash Wheel family has been expanding. The Inner Harbor currently hosts four trash wheels: Mr. Trash Wheel (2014), Professor Trash Wheel (2016), Captain Trash Wheel (2018), and Gwynnda the Good Wheel of the West (2021). This analysis will focus on Professor Trash Wheel. She is acclaimed as "the brainy and beautiful wheel residing in Harris Creek in the Canton neighborhood of Baltimore city". The intended audience is residents of Baltimore or anyone who is interested in the environmental impact of the Mr. Trash Wheel initiatives.
+In its success, the Mr. Trash Wheel family has been expanding. The Inner Harbor currently hosts four trash wheels: Mr. Trash Wheel (2014), Professor Trash Wheel (2016), Captain Trash Wheel (2018), and Gwynnda the Good Wheel of the West (2021). This analysis will focus on Professor Trash Wheel. She is acclaimed as "the brainy and beautiful wheel residing in Harris Creek in the Canton neighborhood of Baltimore city". The intended audience for this analysis is residents of Baltimore and anyone who is interested in the environmental impact of the Mr. Trash Wheel initiatives.
 
 ::: {.callout-important title="Activity"}
 I took the [Trash Wheel personality test](https://waterfrontpartnership.typeform.com/trashwheel) and was found to relate most to Professor Trash Wheel, inspiring my choice for this analysis. I encourage you to take the test yourself!
@@ -53,7 +53,7 @@ data.frame(
 
 ### Data Processing
 
-First, we removed the data for the current year of 2024, as they have missing values for the Homes Powered variable. We also removed the last row of the dataset, which had the calculated totals of relevant variables since the construction of Professor Trash Wheel. Notably, the data collection of Professor Trash Wheel usually occurs one to three times per month but does not appear to be conducted on a consistent timetable. Therefore, for this analysis, we use aggregated monthly data which combines all dumpsters collected for a given month and year.
+First, we removed data for the current year of 2024, as they currently have missing values for the Homes Powered variable. We also removed the last row of the dataset, which had the calculated totals of relevant variables since the construction of Professor Trash Wheel. Notably, the data collection of Professor Trash Wheel usually occurs one to three times per month but does not appear to be conducted on a consistent timetable. Therefore, for this analysis, we use aggregated monthly data which combines all counts and totals for the dumpsters collected for each given month and year.
 
 ```{r, echo = FALSE}
 df_orig = read_excel('202409 Trash Wheel Collection Data.xlsx', sheet = 2)
@@ -86,7 +86,7 @@ df = df_orig %>% rename_with(~ c("dumpster", "month", "year", "date", "weight",
     ggplot(df, aes(x = date, y = monthly_total_homes_powered)) +
       geom_line() +
       labs(title = "Homes Powered by Professor Trash Wheel Over Time", x = "Date", y = "Homes Powered Each Month", subtitle = "(2016-2023)") +
-  geom_smooth(method = "lm", se = FALSE, color = "Red") +
+  geom_smooth(method = "lm", se = FALSE, color = "pink") +
       theme_minimal()
 ```
 
@@ -140,40 +140,48 @@ Since the electricity used to power the homes each month is the result of incine
 
 ### Research Question
 
-Are there seasonal trends in the number of homes powered, after controlling for the volume?
+Are there seasonal (monthly) trends in the number of homes powered by Professor Trash Wheel, after controlling for the volume of waste collected?
+
+![](image){fig-align="center" width="400"}
 
 ### Methods
 
 First, we fit a linear regression model using time to model monthly homes powered, while controlling for the volume of the waste collected that month. We also fit a model using both time, month, and volume to model the homes powered each month.
 
-Since we identified that there may be a seasonal trend in the data, we also fit two generalized additive models (GAM) using the `mgcv` R package. The first assumes that there are uncorrelated errors and the second model assumes an AR1 correlation structure. We specify a spline to the month and time variables only. For both models, the dimensions of the basis used for the spline are specified to be 12 for month (as this is the number of unique values). We also specify the basis type to be a cyclic cubic spline, which means there is no discontinuity between January and December. For the model allowing correlated errors, we fit an autoregressive moving-average process to the residuals of order 1. A complete tutorial for GAM for seasonal data can be found [here](https://fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/). [@gavin2014gam] To compare these methods, we use Adjusted $R^2$ values.
+Since we identified that there may be a seasonal trend in the data, we also fit two generalized additive models (GAM) using the `mgcv` R package. The first assumes that there are uncorrelated errors and the second model assumes an AR1 correlation structure. We specify a spline to the month and time variables only. For both models, the dimensions of the basis used for the spline are specified to be 12 for month (as this is the number of unique values). We also specify the basis type to be a cyclic cubic spline, which means there is no discontinuity between January and December. For the model allowing correlated errors, we fit an autoregressive moving-average process to the residuals of order 1. The methods used here were adapted from a tutorial for GAM for seasonal data [@gavin2014gam]. To compare these methods, we use Adjusted $R^2$ values.
 
 ### Analysis
 
-Comparing the two linear models, we see that the more parsimonious model with time and monthly total volume seems to fit the data better than when controlling for month. This is shown by the adjusted $R^2$ values being nearly identical (\~84%) and the month variable being not statistically significant with the other variables in the model. In the model with time and monthly total volume, both predictors are statistically significant with a positive relationship to homes powered. It is interesting to note that the slightly decreasing trend present in Figure 1 disappears when controlling for volume.
+The results for the first linear regression model, using time and monthly total volume to model homes powered, show that both predictors are statistically significant with a positive relationship to our outcome.
 
 ```{r}
 lm_fit_1 = lm(monthly_total_homes_powered ~ monthly_total_volume + time, df)
-
-lm_fit_2 = lm(monthly_total_homes_powered ~ monthly_total_volume + time + month, df)
-
 summary(lm_fit_1)
+```
+
+After running the second model, which includes the month, we see that adjusting for such a seasonal trend does not improve our model. This is shown by the adjusted $R^2$ values being nearly identical (\~84%) and the month variable being not statistically significant with the other variables in the model. It is interesting to note that the slightly decreasing trend present in Figure 1 is reversed (indicated by the positive slope here) when we control for volume.
+
+```{r}
+lm_fit_2 = lm(monthly_total_homes_powered ~ monthly_total_volume + time + month, df)
 summary(lm_fit_2)
 ```
 
-Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume and a smooth term for time. We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see a smoothed curve for the relationship investigated in Figure 2. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted $R^2$ is 84.9% for this model.
+Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume (with a positive relationship with homes powered) and a statistically significant smooth term for time. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted $R^2$ is 84.9% for this model.
 
 ```{r}
 m = gamm(monthly_total_homes_powered ~ s(month, bs = "cc", k = 12) + monthly_total_volume + s(time), data = df)
 summary(m$gam)
+```
 
+We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see the smoothed version of the relationship we elucidated in Figure 2.
+
+```{r}
 layout(matrix(1:2, ncol = 2))
 plot(m$gam, scale = 0)
-acf(resid(m$lme), lag.max = 36, main = "ACF")
 layout(1)
 ```
 
-We also generate an autocorrelation function (ACF) plot, which indicates that there may be a slight autocorrelation, but it doesn't seem to be evident. We fit another GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted $R^2$ compared to the uncorrelated version. The Likelihood Ratio Test result indicates that the simpler GAM model is better. Comparing to the linear regression models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.
+We fit our final model as a GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted $R^2$ compared to the uncorrelated model.
 
 ```{r}
 ctrl = list(niterEM = 0, msVerbose = FALSE, optimMethod="L-BFGS-B")
@@ -186,4 +194,12 @@ summary(m1$gam)
 anova(m$lme, m1$lme)
 ```
 
+The Likelihood Ratio Test result does not reach statistical significance, which indicates that the simpler GAM model best fits the data. Comparing the four models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.
 
+### Conclusion
+
+The analysis of the number of homes powered by Professor Trash Wheel over time reveals several important insights into the relationship between seasonal trends, waste volume, and electricity generation. While the linear regression models showed that both time and waste volume significantly contributed to the number of homes powered, adjusting for seasonal effects did not improve the model's fit, suggesting that volume is the primary driver of electricity generation.
+
+Generalized Additive Models (GAM), including both uncorrelated and autoregressive error structures, further confirmed the significance of waste volume and highlighted a mild seasonal pattern, though the month variable did not reach statistical significance in the presence of volume. The results suggest that while seasonal fluctuations may exist, the volume of waste collected remains the most influential factor in determining the number of homes powered by Professor Trash Wheel, with both models explaining around 85% of the variation in the data.
+
+Future research could expand on this by exploring how other factors — such as waste composition, weight, and long-term trends in pollution — contribute to energy production and inform strategies for waste reduction, in relation to the Mr. Trash Wheel family. Such research is crucial for understanding the environmental needs of Baltimore, raising public awareness, and providing evidence to support policies aimed at reducing waste and enhancing sustainability.

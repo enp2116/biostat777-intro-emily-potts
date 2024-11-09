@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Analysis – Emily Potts</title>
+<title>Example Analysis – Emily Potts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -183,7 +183,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./Example_Analysis.html" aria-current="page"> 
-<span class="menu-text">Data Analysis</span></a>
+<span class="menu-text">Example Analysis</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -208,6 +208,7 @@ window.Quarto = {
   <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research Question</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -216,7 +217,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Analysis</h1>
+<h1 class="title">Example Analysis</h1>
 </div>
 
 
@@ -235,13 +236,13 @@ window.Quarto = {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="trashwheel.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="800"></p>
+<p><img src="professor.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="800"></p>
 </figure>
 </div>
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
 <p>In 2014, the city of Baltimore created the first trash interceptor, named Mr.&nbsp;Trash Wheel, to clean up pollution in its waterways <span class="citation" data-cites="mrtrashwheel">(<a href="#ref-mrtrashwheel" role="doc-biblioref">Mr. Trash Wheel 2024</a>)</span>. The key idea is that the semi-automatic interceptor collects pollutants and prevents them from migrating into the Chesapeake Bay. The trash are incinerated and then converted into electricity, which are used to power homes in Maryland. In the last decade, over a million pounds of debris have been collected.</p>
-<p>In its success, the Mr.&nbsp;Trash Wheel family has been expanding. The Inner Harbor currently hosts four trash wheels: Mr.&nbsp;Trash Wheel (2014), Professor Trash Wheel (2016), Captain Trash Wheel (2018), and Gwynnda the Good Wheel of the West (2021). This analysis will focus on Professor Trash Wheel. She is acclaimed as “the brainy and beautiful wheel residing in Harris Creek in the Canton neighborhood of Baltimore city”. The intended audience is residents of Baltimore or anyone who is interested in the environmental impact of the Mr.&nbsp;Trash Wheel initiatives.</p>
+<p>In its success, the Mr.&nbsp;Trash Wheel family has been expanding. The Inner Harbor currently hosts four trash wheels: Mr.&nbsp;Trash Wheel (2014), Professor Trash Wheel (2016), Captain Trash Wheel (2018), and Gwynnda the Good Wheel of the West (2021). This analysis will focus on Professor Trash Wheel. She is acclaimed as “the brainy and beautiful wheel residing in Harris Creek in the Canton neighborhood of Baltimore city”. The intended audience for this analysis is residents of Baltimore and anyone who is interested in the environmental impact of the Mr.&nbsp;Trash Wheel initiatives.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Activity">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -344,7 +345,7 @@ Fun Fact!
 </section>
 <section id="data-processing" class="level3">
 <h3 class="anchored" data-anchor-id="data-processing">Data Processing</h3>
-<p>First, we removed the data for the current year of 2024, as they have missing values for the Homes Powered variable. We also removed the last row of the dataset, which had the calculated totals of relevant variables since the construction of Professor Trash Wheel. Notably, the data collection of Professor Trash Wheel usually occurs one to three times per month but does not appear to be conducted on a consistent timetable. Therefore, for this analysis, we use aggregated monthly data which combines all dumpsters collected for a given month and year.</p>
+<p>First, we removed data for the current year of 2024, as they currently have missing values for the Homes Powered variable. We also removed the last row of the dataset, which had the calculated totals of relevant variables since the construction of Professor Trash Wheel. Notably, the data collection of Professor Trash Wheel usually occurs one to three times per month but does not appear to be conducted on a consistent timetable. Therefore, for this analysis, we use aggregated monthly data which combines all counts and totals for the dumpsters collected for each given month and year.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -374,7 +375,7 @@ Fun Fact!
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> monthly_total_homes_powered)) <span class="sc">+</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Homes Powered by Professor Trash Wheel Over Time"</span>, <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Homes Powered Each Month"</span>, <span class="at">subtitle =</span> <span class="st">"(2016-2023)"</span>) <span class="sc">+</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"Red"</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"pink"</span>) <span class="sc">+</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display page-columns page-full">
@@ -466,24 +467,26 @@ Note
 </section>
 <section id="research-question" class="level3">
 <h3 class="anchored" data-anchor-id="research-question">Research Question</h3>
-<p>Are there seasonal trends in the number of homes powered, after controlling for the volume?</p>
+<p>Are there seasonal (monthly) trends in the number of homes powered by Professor Trash Wheel, after controlling for the volume of waste collected?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="image.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="400"></p>
+</figure>
+</div>
 </section>
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
 <p>First, we fit a linear regression model using time to model monthly homes powered, while controlling for the volume of the waste collected that month. We also fit a model using both time, month, and volume to model the homes powered each month.</p>
-<p>Since we identified that there may be a seasonal trend in the data, we also fit two generalized additive models (GAM) using the <code>mgcv</code> R package. The first assumes that there are uncorrelated errors and the second model assumes an AR1 correlation structure. We specify a spline to the month and time variables only. For both models, the dimensions of the basis used for the spline are specified to be 12 for month (as this is the number of unique values). We also specify the basis type to be a cyclic cubic spline, which means there is no discontinuity between January and December. For the model allowing correlated errors, we fit an autoregressive moving-average process to the residuals of order 1. A complete tutorial for GAM for seasonal data can be found <a href="https://fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/">here</a>. <span class="citation" data-cites="gavin2014gam">(<a href="#ref-gavin2014gam" role="doc-biblioref">Simpson 2014</a>)</span> To compare these methods, we use Adjusted <span class="math inline">\(R^2\)</span> values.</p>
+<p>Since we identified that there may be a seasonal trend in the data, we also fit two generalized additive models (GAM) using the <code>mgcv</code> R package. The first assumes that there are uncorrelated errors and the second model assumes an AR1 correlation structure. We specify a spline to the month and time variables only. For both models, the dimensions of the basis used for the spline are specified to be 12 for month (as this is the number of unique values). We also specify the basis type to be a cyclic cubic spline, which means there is no discontinuity between January and December. For the model allowing correlated errors, we fit an autoregressive moving-average process to the residuals of order 1. The methods used here were adapted from a tutorial for GAM for seasonal data <span class="citation" data-cites="gavin2014gam">(<a href="#ref-gavin2014gam" role="doc-biblioref">Simpson 2014</a>)</span>. To compare these methods, we use Adjusted <span class="math inline">\(R^2\)</span> values.</p>
 </section>
 <section id="analysis" class="level3">
 <h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
-<p>Comparing the two linear models, we see that the more parsimonious model with time and monthly total volume seems to fit the data better than when controlling for month. This is shown by the adjusted <span class="math inline">\(R^2\)</span> values being nearly identical (~84%) and the month variable being not statistically significant with the other variables in the model. In the model with time and monthly total volume, both predictors are statistically significant with a positive relationship to homes powered. It is interesting to note that the slightly decreasing trend present in Figure 1 disappears when controlling for volume.</p>
+<p>The results for the first linear regression model, using time and monthly total volume to model homes powered, show that both predictors are statistically significant with a positive relationship to our outcome.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lm_fit_1 <span class="ot">=</span> <span class="fu">lm</span>(monthly_total_homes_powered <span class="sc">~</span> monthly_total_volume <span class="sc">+</span> time, df)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lm_fit_2 <span class="ot">=</span> <span class="fu">lm</span>(monthly_total_homes_powered <span class="sc">~</span> monthly_total_volume <span class="sc">+</span> time <span class="sc">+</span> month, df)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -507,9 +510,13 @@ Residual standard error: 13.25 on 69 degrees of freedom
 Multiple R-squared:  0.845, Adjusted R-squared:  0.8405 
 F-statistic:   188 on 2 and 69 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
+</div>
+<p>After running the second model, which includes the month, we see that adjusting for such a seasonal trend does not improve our model. This is shown by the adjusted <span class="math inline">\(R^2\)</span> values being nearly identical (~84%) and the month variable being not statistically significant with the other variables in the model. It is interesting to note that the slightly decreasing trend present in Figure 1 is reversed (indicated by the positive slope here) when we control for volume.</p>
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lm_fit_2 <span class="ot">=</span> <span class="fu">lm</span>(monthly_total_homes_powered <span class="sc">~</span> monthly_total_volume <span class="sc">+</span> time <span class="sc">+</span> month, df)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -535,7 +542,7 @@ Multiple R-squared:  0.8458,    Adjusted R-squared:  0.839
 F-statistic: 124.3 on 3 and 68 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume and a smooth term for time. We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see a smoothed curve for the relationship investigated in Figure 2. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted <span class="math inline">\(R^2\)</span> is 84.9% for this model.</p>
+<p>Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume (with a positive relationship with homes powered) and a statistically significant smooth term for time. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted <span class="math inline">\(R^2\)</span> is 84.9% for this model.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -568,6 +575,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 R-sq.(adj) =  0.849   
   Scale est. = 158.71    n = 72</code></pre>
 </div>
+</div>
+<p>We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see the smoothed version of the relationship we elucidated in Figure 2.</p>
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>))</span>
@@ -576,24 +586,16 @@ R-sq.(adj) =  0.849
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Example_Analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Example_Analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(m<span class="sc">$</span>lme), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ACF"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Example_Analysis_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
 </div>
-</div>
-</div>
-<p>We also generate an autocorrelation function (ACF) plot, which indicates that there may be a slight autocorrelation, but it doesn’t seem to be evident. We fit another GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted <span class="math inline">\(R^2\)</span> compared to the uncorrelated version. The Likelihood Ratio Test result indicates that the simpler GAM model is better. Comparing to the linear regression models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.</p>
+<p>We fit our final model as a GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted <span class="math inline">\(R^2\)</span> compared to the uncorrelated model.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -640,6 +642,13 @@ m$lme      1  6 583.6590 597.3190 -285.8295
 m1$lme     2  7 585.2809 601.2176 -285.6405 1 vs 2 0.3780886  0.5386</code></pre>
 </div>
 </div>
+<p>The Likelihood Ratio Test result does not reach statistical significance, which indicates that the simpler GAM model best fits the data. Comparing the four models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>The analysis of the number of homes powered by Professor Trash Wheel over time reveals several important insights into the relationship between seasonal trends, waste volume, and electricity generation. While the linear regression models showed that both time and waste volume significantly contributed to the number of homes powered, adjusting for seasonal effects did not improve the model’s fit, suggesting that volume is the primary driver of electricity generation.</p>
+<p>Generalized Additive Models (GAM), including both uncorrelated and autoregressive error structures, further confirmed the significance of waste volume and highlighted a mild seasonal pattern, though the month variable did not reach statistical significance in the presence of volume. The results suggest that while seasonal fluctuations may exist, the volume of waste collected remains the most influential factor in determining the number of homes powered by Professor Trash Wheel, with both models explaining around 85% of the variation in the data.</p>
+<p>Future research could expand on this by exploring how other factors — such as waste composition, weight, and long-term trends in pollution — contribute to energy production and inform strategies for waste reduction, in relation to the Mr.&nbsp;Trash Wheel family. Such research is crucial for understanding the environmental needs of Baltimore, raising public awareness, and providing evidence to support policies aimed at reducing waste and enhancing sustainability.</p>
 
 
 
@@ -751,7 +760,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/epotts5\.quarto\.pub\/emily-potts");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

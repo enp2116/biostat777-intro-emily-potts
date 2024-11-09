@@ -2,6 +2,13 @@
 title: "Home"
 ---
 
-![](Potts_Hopkins_headshot.JPG){fig-align="left" width="30%"}
+![](Potts_Hopkins_headshot.JPG){width="40%"}
 
-Welcome! My name is Emily (she/her) and I'm a first-year PhD student in Biostatistics at the Johns Hopkins Bloomberg School of Public Health. In my free time, I enjoy tumbling and spending time in nature!
+Hi! My name is Emily and I'm a first-year PhD student in Biostatistics at the Johns Hopkins Bloomberg School of Public Health. In my free time, I enjoy spending time in nature and tumbling!
+
+::: {layout-nrow=1 layout-ncol=3 style="display: flex; justify-content: space-around; align-items: center;"}
+![](nature.HEIC)
+{{< video "tumble.mov" >}}
+![](dog.JPG)
+
+:::
