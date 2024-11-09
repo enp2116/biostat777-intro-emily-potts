@@ -449,6 +449,20 @@ Figure&nbsp;3: Positive correlation between volume and homes powered.
 </div>
 </div>
 <p>Since the electricity used to power the homes each month is the result of incinerating of the collected waste, we may hypothesize that the volume, weight, or the type of waste is influencial in electricity generation. In this analysis, I choose to investigate volume. The scatterplot of Volume vs.&nbsp;Homes Powered with a fitted linear regression line shows a positive relationship, suggesting that as volume increases, the number of homes powered also tends to increase. It is also worth noting that Professor Trash Wheel is often emptied when she reaches capacity, which is at 15 tons. However, this can occur multiple times each month, hence clustering of volume at 15, 30, and 45 tons.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>dplyr</code>: rename_with(), filter(), slice(), separate(), mutate_if), group_by(), mutate(), across(), select(), ungroup()</p>
+<p><code>ggplot2</code>: geom_line(), geom_boxplot(), geom_point(), geom_smooth()</p>
+</div>
+</div>
 </section>
 <section id="research-question" class="level3">
 <h3 class="anchored" data-anchor-id="research-question">Research Question</h3>
@@ -626,20 +640,6 @@ m$lme      1  6 583.6590 597.3190 -285.8295
 m1$lme     2  7 585.2809 601.2176 -285.6405 1 vs 2 0.3780886  0.5386</code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>dplyr</code>: rename_with(), filter(), slice(), separate(), mutate_if), group_by(), mutate(), across(), select(), ungroup()</p>
-<p><code>ggplot2</code>: geom_line(), geom_boxplot(), geom_point(), geom_smooth()</p>
-</div>
-</div>
 
 
 
@@ -751,7 +751,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/enp2116\.github\.io\/biostat777-intro-emily-potts\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

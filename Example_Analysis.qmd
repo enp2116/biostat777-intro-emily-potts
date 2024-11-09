@@ -90,7 +90,7 @@ df = df_orig %>% rename_with(~ c("dumpster", "month", "year", "date", "weight",
       theme_minimal()
 ```
 
-The time series plot of the number of homes powered by Professor Trash Wheel from 2016 to 2023 reveals significant variability over time, with an overall slight decline in the number of homes powered. The variability within each year indicates that seasonal trends may be present. 
+The time series plot of the number of homes powered by Professor Trash Wheel from 2016 to 2023 reveals significant variability over time, with an overall slight decline in the number of homes powered. The variability within each year indicates that seasonal trends may be present.
 
 ```{r}
 #| label: fig-cap-margin-2
@@ -132,6 +132,12 @@ ggplot(df, aes(x = monthly_total_volume, y = monthly_total_homes_powered)) +
 
 Since the electricity used to power the homes each month is the result of incinerating of the collected waste, we may hypothesize that the volume, weight, or the type of waste is influencial in electricity generation. In this analysis, I choose to investigate volume. The scatterplot of Volume vs. Homes Powered with a fitted linear regression line shows a positive relationship, suggesting that as volume increases, the number of homes powered also tends to increase. It is also worth noting that Professor Trash Wheel is often emptied when she reaches capacity, which is at 15 tons. However, this can occur multiple times each month, hence clustering of volume at 15, 30, and 45 tons.
 
+::: callout-note
+`dplyr`: rename_with(), filter(), slice(), separate(), mutate_if), group_by(), mutate(), across(), select(), ungroup()
+
+`ggplot2`: geom_line(), geom_boxplot(), geom_point(), geom_smooth()
+:::
+
 ### Research Question
 
 Are there seasonal trends in the number of homes powered, after controlling for the volume?
@@ -144,7 +150,8 @@ Since we identified that there may be a seasonal trend in the data, we also fit 
 
 ### Analysis
 
-Comparing the two linear models, we see that the more parsimonious model with time and monthly total volume seems to fit the data better than when controlling for month. This is shown by the adjusted $R^2$ values being nearly identical (~84%) and the month variable being not statistically significant with the other variables in the model. In the model with time and monthly total volume, both predictors are statistically significant with a positive relationship to homes powered. It is interesting to note that the slightly decreasing trend present in Figure 1 disappears when controlling for volume.
+Comparing the two linear models, we see that the more parsimonious model with time and monthly total volume seems to fit the data better than when controlling for month. This is shown by the adjusted $R^2$ values being nearly identical (\~84%) and the month variable being not statistically significant with the other variables in the model. In the model with time and monthly total volume, both predictors are statistically significant with a positive relationship to homes powered. It is interesting to note that the slightly decreasing trend present in Figure 1 disappears when controlling for volume.
+
 ```{r}
 lm_fit_1 = lm(monthly_total_homes_powered ~ monthly_total_volume + time, df)
 
@@ -154,7 +161,7 @@ summary(lm_fit_1)
 summary(lm_fit_2)
 ```
 
-Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume and a smooth term for time. We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see a smoothed curve for the relationship investigated in Figure 2. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted $R^2$ is 84.9% for this model. 
+Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume and a smooth term for time. We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see a smoothed curve for the relationship investigated in Figure 2. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted $R^2$ is 84.9% for this model.
 
 ```{r}
 m = gamm(monthly_total_homes_powered ~ s(month, bs = "cc", k = 12) + monthly_total_volume + s(time), data = df)
@@ -167,6 +174,7 @@ layout(1)
 ```
 
 We also generate an autocorrelation function (ACF) plot, which indicates that there may be a slight autocorrelation, but it doesn't seem to be evident. We fit another GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted $R^2$ compared to the uncorrelated version. The Likelihood Ratio Test result indicates that the simpler GAM model is better. Comparing to the linear regression models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.
+
 ```{r}
 ctrl = list(niterEM = 0, msVerbose = FALSE, optimMethod="L-BFGS-B")
 
@@ -177,14 +185,5 @@ summary(m1$gam)
 
 anova(m$lme, m1$lme)
 ```
-
-
-::: {.callout-note}
-`dplyr  `: rename_with(), filter(), slice(), separate(), mutate_if), group_by(), mutate(), across(), select(), ungroup()
-
-`ggplot2`: geom_line(), geom_boxplot(), geom_point(), geom_smooth()
-:::
-
-
 
 
