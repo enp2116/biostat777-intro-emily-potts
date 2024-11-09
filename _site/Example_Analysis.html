@@ -120,7 +120,38 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -172,16 +203,16 @@ div.csl-indent {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a></li>
-  <li><a href="#question" id="toc-question" class="nav-link" data-scroll-target="#question">Question</a></li>
   <li><a href="#data-processing" id="toc-data-processing" class="nav-link" data-scroll-target="#data-processing">Data Processing</a></li>
+  <li><a href="#exploratory-analysis" id="toc-exploratory-analysis" class="nav-link" data-scroll-target="#exploratory-analysis">Exploratory Analysis</a></li>
+  <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research Question</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
-  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -209,90 +240,406 @@ div.csl-indent {
 </div>
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>In 2014, the city of Baltimore created the first trash interceptor, named Mr.&nbsp;Trash Wheel, to clean up pollution in its waterways <span class="citation" data-cites="mrtrashwheel">(<a href="#ref-mrtrashwheel" role="doc-biblioref">Mr. Trash Wheel 2024</a>)</span>. The key idea is that the semi-automatic interceptor collects pollutants and prevents them from migrating into the Chesapeake Bay. The trash are incinerated and then converted into electricity, which are used to power homes in Maryland. In the last decade, over a million pounds of debris have been collected.</p>
+<p>In its success, the Mr.&nbsp;Trash Wheel family has been expanding. The Inner Harbor currently hosts four trash wheels: Mr.&nbsp;Trash Wheel (2014), Professor Trash Wheel (2016), Captain Trash Wheel (2018), and Gwynnda the Good Wheel of the West (2021). This analysis will focus on Professor Trash Wheel. She is acclaimed as “the brainy and beautiful wheel residing in Harris Creek in the Canton neighborhood of Baltimore city”. The intended audience is residents of Baltimore or anyone who is interested in the environmental impact of the Mr.&nbsp;Trash Wheel initiatives.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Activity">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I took the <a href="https://waterfrontpartnership.typeform.com/trashwheel">Trash Wheel personality test</a> and was found to relate most to Professor Trash Wheel, inspiring my choice for this analysis. I encourage you to take the test yourself!</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Fun Fact!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fun Fact!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Professor Trash Wheel is a champion for women in STEM and likes Beyoncé, Eleanor Roosevelt, and sea otters. She dislikes low tides, strong winds, and the patriarchy. We also have the same birthday! You can also meet the other trash wheels <a href="https://www.mrtrashwheel.com/trash-wheel-family">here</a>.</p>
+</div>
+</div>
+</section>
+<section id="dataset" class="level3">
+<h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
+<p>The public datasets for the Mr.&nbsp;Trash Wheel family are provided by the Waterfront Partnership of Baltimore in the form of a Google spreadsheet <span class="citation" data-cites="source">(<a href="#ref-source" role="doc-biblioref"><span>“Waterfront Partner Initiative”</span> 2024</a>)</span> <span class="citation" data-cites="dataset">(<a href="#ref-dataset" role="doc-biblioref">Initiative 2024</a>)</span>. These are updated on at least a monthly basis and have almost no missing data. The variables are fairly self-explanatory, although a data dictionary provided here for completeness. It is worth noting that the Homes Powered variable is calculated under the assumption that an average household will use 30 kilowatts per day of electricity.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Data Dictionary</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Variable</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Dumpster</td>
+<td style="text-align: left;">Identifier for the dumpster</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Month</td>
+<td style="text-align: left;">Month of data collection</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Year</td>
+<td style="text-align: left;">Year of data collection</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Date</td>
+<td style="text-align: left;">Date of data collection</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Weight</td>
+<td style="text-align: left;">Weight of waste in tons</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Volume</td>
+<td style="text-align: left;">Volume of waste in cubic yards</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Plastic Bottles</td>
+<td style="text-align: left;">Count of plastic bottles</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Polystyrene</td>
+<td style="text-align: left;">Count of polystyrene items</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cigarettes</td>
+<td style="text-align: left;">Count of cigarette butts</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Glass Bottles</td>
+<td style="text-align: left;">Count of glass bottles</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Plastic Bags</td>
+<td style="text-align: left;">Count of plastic bags</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wrappers</td>
+<td style="text-align: left;">Count of wrappers</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Homes Powered</td>
+<td style="text-align: left;">Estimated number of homes powered</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="data-processing" class="level3">
+<h3 class="anchored" data-anchor-id="data-processing">Data Processing</h3>
+<p>First, we removed the data for the current year of 2024, as they have missing values for the Homes Powered variable. We also removed the last row of the dataset, which had the calculated totals of relevant variables since the construction of Professor Trash Wheel. Notably, the data collection of Professor Trash Wheel usually occurs one to three times per month but does not appear to be conducted on a consistent timetable. Therefore, for this analysis, we use aggregated monthly data which combines all dumpsters collected for a given month and year.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> df_orig <span class="sc">%&gt;%</span> <span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">c</span>(<span class="st">"dumpster"</span>, <span class="st">"month"</span>, <span class="st">"year"</span>, <span class="st">"date"</span>, <span class="st">"weight"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"volume"</span>, <span class="st">"plastic_bottles"</span>, <span class="st">"polystyrene"</span>, <span class="st">"cigs"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"glass_bottles"</span>, <span class="st">"plastic_bags"</span>, <span class="st">"wrappers"</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"homes_powered"</span>), <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(homes_powered)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="at">sep=</span><span class="st">"-"</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>), <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.character, as.numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(year, month) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(volume, plastic_bottles, polystyrene, cigs, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                  glass_bottles, plastic_bags, wrappers, homes_powered), <span class="sc">~</span> <span class="fu">sum</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.names =</span> <span class="st">"monthly_total_{col}"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">14</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">as.Date</span>(<span class="fu">paste</span>(year, month, <span class="st">"01"</span>, <span class="at">sep =</span> <span class="st">"-"</span>))) <span class="sc">/</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="exploratory-analysis" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="exploratory-analysis">Exploratory Analysis</h3>
+<div class="cell page-columns page-full" data-cap-location="margin">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2" data-cap-location="margin"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> monthly_total_homes_powered)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Homes Powered by Professor Trash Wheel Over Time"</span>, <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"Homes Powered Each Month"</span>, <span class="at">subtitle =</span> <span class="st">"(2016-2023)"</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"Red"</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-cap-margin" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-cap-location="margin">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-cap-margin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Example_Analysis_files/figure-html/fig-cap-margin-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-cap-margin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Homes powered by Professor Trash Wheel over time, showing a slight downward trend.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The time series plot of the number of homes powered by Professor Trash Wheel from 2016 to 2023 reveals significant variability over time, with an overall slight decline in the number of homes powered. The variability within each year indicates that seasonal trends may be present.</p>
+<div class="cell page-columns page-full" data-cap-location="margin">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" data-cap-location="margin"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">~</span> <span class="st">"Winter"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">~</span> <span class="st">"Spring"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>) <span class="sc">~</span> <span class="st">"Summer"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>) <span class="sc">~</span> <span class="st">"Fall"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>season_colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Winter"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Spring"</span> <span class="ot">=</span> <span class="st">"lightgreen"</span>, <span class="st">"Summer"</span> <span class="ot">=</span> <span class="st">"pink"</span>, <span class="st">"Fall"</span> <span class="ot">=</span> <span class="st">"orange"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>month_labels <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jan"</span>, <span class="st">"Feb"</span>, <span class="st">"Mar"</span>, <span class="st">"Apr"</span>, <span class="st">"May"</span>, <span class="st">"Jun"</span>, <span class="st">"Jul"</span>, <span class="st">"Aug"</span>, <span class="st">"Sep"</span>, <span class="st">"Oct"</span>, <span class="st">"Nov"</span>, <span class="st">"Dec"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(month, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">labels =</span> month_labels), <span class="at">y =</span> monthly_total_homes_powered, <span class="at">fill =</span> season)) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> season_colors) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Homes Powered Each Month"</span>, <span class="at">fill =</span> <span class="st">"Season"</span>, <span class="at">title =</span> <span class="st">"Seasonal Trends in Homes Powered by Professor Trash Wheel"</span>, <span class="at">subtitle =</span> <span class="st">"(2016-2023)"</span>) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-cap-margin-2" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-cap-location="margin">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-cap-margin-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Example_Analysis_files/figure-html/fig-cap-margin-2-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-cap-margin-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Homes powered by month, grouped by season.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This boxplot shows the distribution of homes powered each month by Professor Trash Wheel, with months categorized by season (Winter, Spring, Summer, and Fall). There is notable variability across seasons, with higher medians and greater variability in spring and summer months compared to fall and winter, where the number of homes powered tends to be lower and more consistent.</p>
+<div class="cell page-columns page-full" data-cap-location="margin">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" data-cap-location="margin"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> monthly_total_volume, <span class="at">y =</span> monthly_total_homes_powered)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scatterplot of Volume vs. Homes Powered by Professor Trash Wheel"</span>, <span class="at">subtitle =</span> <span class="st">"(2016-2023)"</span>, <span class="at">x =</span> <span class="st">"Volume"</span>, <span class="at">y =</span> <span class="st">"Homes Powered Each Month"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display page-columns page-full">
+<div id="fig-cap-margin-3" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-cap-location="margin">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-cap-margin-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Example_Analysis_files/figure-html/fig-cap-margin-3-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-cap-margin-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Positive correlation between volume and homes powered.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Since the electricity used to power the homes each month is the result of incinerating of the collected waste, we may hypothesize that the volume, weight, or the type of waste is influencial in electricity generation. In this analysis, I choose to investigate volume. The scatterplot of Volume vs.&nbsp;Homes Powered with a fitted linear regression line shows a positive relationship, suggesting that as volume increases, the number of homes powered also tends to increase. It is also worth noting that Professor Trash Wheel is often emptied when she reaches capacity, which is at 15 tons. However, this can occur multiple times each month, hence clustering of volume at 15, 30, and 45 tons.</p>
+</section>
+<section id="research-question" class="level3">
+<h3 class="anchored" data-anchor-id="research-question">Research Question</h3>
+<p>Are there seasonal trends in the number of homes powered, after controlling for the volume?</p>
+</section>
+<section id="methods" class="level3">
+<h3 class="anchored" data-anchor-id="methods">Methods</h3>
+<p>First, we fit a linear regression model using time to model monthly homes powered, while controlling for the volume of the waste collected that month. We also fit a model using both time, month, and volume to model the homes powered each month.</p>
+<p>Since we identified that there may be a seasonal trend in the data, we also fit two generalized additive models (GAM) using the <code>mgcv</code> R package. The first assumes that there are uncorrelated errors and the second model assumes an AR1 correlation structure. We specify a spline to the month and time variables only. For both models, the dimensions of the basis used for the spline are specified to be 12 for month (as this is the number of unique values). We also specify the basis type to be a cyclic cubic spline, which means there is no discontinuity between January and December. For the model allowing correlated errors, we fit an autoregressive moving-average process to the residuals of order 1. A complete tutorial for GAM for seasonal data can be found <a href="https://fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/">here</a>. <span class="citation" data-cites="gavin2014gam">(<a href="#ref-gavin2014gam" role="doc-biblioref">Simpson 2014</a>)</span> To compare these methods, we use Adjusted <span class="math inline">\(R^2\)</span> values.</p>
+</section>
+<section id="analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
+<p>Comparing the two linear models, we see that the more parsimonious model with time and monthly total volume seems to fit the data better than when controlling for month. This is shown by the adjusted <span class="math inline">\(R^2\)</span> values being nearly identical (~84%) and the month variable being not statistically significant with the other variables in the model. In the model with time and monthly total volume, both predictors are statistically significant with a positive relationship to homes powered. It is interesting to note that the slightly decreasing trend present in Figure 1 disappears when controlling for volume.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lm_fit_1 <span class="ot">=</span> <span class="fu">lm</span>(monthly_total_homes_powered <span class="sc">~</span> monthly_total_volume <span class="sc">+</span> time, df)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lm_fit_2 <span class="ot">=</span> <span class="fu">lm</span>(monthly_total_homes_powered <span class="sc">~</span> monthly_total_volume <span class="sc">+</span> time <span class="sc">+</span> month, df)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = monthly_total_homes_powered ~ monthly_total_volume + 
+    time, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-36.270  -9.746   0.127   8.831  25.099 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          -145.0716    40.8979  -3.547 0.000705 ***
+monthly_total_volume    2.7119     0.1399  19.388  &lt; 2e-16 ***
+time                    7.4592     2.1814   3.419 0.001057 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 13.25 on 69 degrees of freedom
+Multiple R-squared:  0.845, Adjusted R-squared:  0.8405 
+F-statistic:   188 on 2 and 69 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = monthly_total_homes_powered ~ monthly_total_volume + 
+    time + month, data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-36.621  -8.853   0.169   8.502  25.192 
+
+Coefficients:
+                      Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          -141.6753    41.4560  -3.417  0.00107 ** 
+monthly_total_volume    2.7109     0.1405  19.292  &lt; 2e-16 ***
+time                    7.1731     2.2405   3.202  0.00208 ** 
+month                   0.2975     0.4854   0.613  0.54191    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 13.31 on 68 degrees of freedom
+Multiple R-squared:  0.8458,    Adjusted R-squared:  0.839 
+F-statistic: 124.3 on 3 and 68 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Next, we fit the GAM with uncorrelated errors. This model yields a statistically significant parametric coefficient for volume and a smooth term for time. We can see the visual relationships between the original time and month variables with their spline variables. Notably, for month we see a smoothed curve for the relationship investigated in Figure 2. In the GAM model results, the smooth term for month is close to statistical significance but is not at a p-value of 0.063. The adjusted <span class="math inline">\(R^2\)</span> is 84.9% for this model.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">gamm</span>(monthly_total_homes_powered <span class="sc">~</span> <span class="fu">s</span>(month, <span class="at">bs =</span> <span class="st">"cc"</span>, <span class="at">k =</span> <span class="dv">12</span>) <span class="sc">+</span> monthly_total_volume <span class="sc">+</span> <span class="fu">s</span>(time), <span class="at">data =</span> df)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m<span class="sc">$</span>gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+monthly_total_homes_powered ~ s(month, bs = "cc", k = 12) + monthly_total_volume + 
+    s(time)
+
+Parametric coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           -5.9005     3.6121  -1.634    0.107    
+monthly_total_volume   2.6248     0.1428  18.387   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+           edf Ref.df      F p-value   
+s(month) 1.578     10  0.427 0.06365 . 
+s(time)  1.000      1 11.758 0.00104 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.849   
+  Scale est. = 158.71    n = 72</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m<span class="sc">$</span>gam, <span class="at">scale =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Example_Analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(<span class="fu">resid</span>(m<span class="sc">$</span>lme), <span class="at">lag.max =</span> <span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ACF"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Example_Analysis_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We also generate an autocorrelation function (ACF) plot, which indicates that there may be a slight autocorrelation, but it doesn’t seem to be evident. We fit another GAM with the AR1 specification. This yields extremely similar results for the coefficients and statistical significance, and adjusted <span class="math inline">\(R^2\)</span> compared to the uncorrelated version. The Likelihood Ratio Test result indicates that the simpler GAM model is better. Comparing to the linear regression models, we have that the GAM with uncorrelated errors explains the most variation in the homes powered each month, specifically 84.9%.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">=</span> <span class="fu">list</span>(<span class="at">niterEM =</span> <span class="dv">0</span>, <span class="at">msVerbose =</span> <span class="cn">FALSE</span>, <span class="at">optimMethod=</span><span class="st">"L-BFGS-B"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">## AR(1)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">=</span> <span class="fu">gamm</span>(monthly_total_homes_powered <span class="sc">~</span> <span class="fu">s</span>(month, <span class="at">bs =</span> <span class="st">"cc"</span>, <span class="at">k =</span> <span class="dv">12</span>) <span class="sc">+</span> monthly_total_volume <span class="sc">+</span> <span class="fu">s</span>(time), <span class="at">data =</span> df, <span class="at">correlation =</span> <span class="fu">corARMA</span>(<span class="at">form =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span> year, <span class="at">p =</span> <span class="dv">1</span>), <span class="at">control =</span> ctrl)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1<span class="sc">$</span>gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+monthly_total_homes_powered ~ s(month, bs = "cc", k = 12) + monthly_total_volume + 
+    s(time)
+
+Parametric coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           -5.5808     3.6091  -1.546    0.127    
+monthly_total_volume   2.6094     0.1407  18.551   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate significance of smooth terms:
+          edf Ref.df      F p-value   
+s(month) 1.53     10  0.393 0.07297 . 
+s(time)  1.00      1 10.159 0.00218 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+R-sq.(adj) =  0.849   
+  Scale est. = 158.98    n = 72</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m<span class="sc">$</span>lme, m1<span class="sc">$</span>lme)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Model df      AIC      BIC    logLik   Test   L.Ratio p-value
+m$lme      1  6 583.6590 597.3190 -285.8295                         
+m1$lme     2  7 585.2809 601.2176 -285.6405 1 vs 2 0.3780886  0.5386</code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Audience
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The intended audience is residents of Baltimore or anyone who is interested in the environmental impact of Mr.&nbsp;Trash Wheel.</p>
+<p><code>dplyr</code>: rename_with(), filter(), slice(), separate(), mutate_if), group_by(), mutate(), across(), select(), ungroup()</p>
+<p><code>ggplot2</code>: geom_line(), geom_boxplot(), geom_point(), geom_smooth()</p>
 </div>
 </div>
-</section>
-<section id="dataset" class="level3">
-<h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
-<p>The public dataset on Mr.&nbsp;Trash Wheel is provided by the Waterfront Partnership of Baltimore in the form of a Google spreadsheet.</p>
-<p>The Mr.&nbsp;Trash Wheel spreadsheet is largely self-explanatory, and includes information on the dumpter number, date of collection, amount of total litter and litter type. Additional spreadsheets for Professor Trash wheel and for precipitation amounts are also included in the document.</p>
-<p><span class="citation" data-cites="dataset">(<a href="#ref-dataset" role="doc-biblioref">Initiative 2024</a>)</span> <span class="citation" data-cites="source">(<a href="#ref-source" role="doc-biblioref"><span>“Waterfront Partner Initiative”</span> 2024</a>)</span></p>
-<p>Data Dictionary: You must include a link to a data dictionary for the data or create one inside the webpage.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Dictionary for Dumpster Data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dumpster_data_dict <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">c</span>(<span class="st">"Dumpster"</span>, <span class="st">"Month"</span>, <span class="st">"Year"</span>, <span class="st">"Date"</span>, <span class="st">"Weight (tons)"</span>, <span class="st">"Volume (cubic yards)"</span>, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Plastic Bottles"</span>, <span class="st">"Polystyrene"</span>, <span class="st">"Cigarette Butts"</span>, <span class="st">"Plastic Bags"</span>, <span class="st">"Wrappers"</span>, <span class="st">"Homes Powered*"</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Description =</span> <span class="fu">c</span>(<span class="st">"Identifier for the dumpster"</span>, <span class="st">"Month of data collection"</span>, <span class="st">"Year of data collection"</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Date of data collection"</span>, <span class="st">"Weight of waste in tons"</span>, <span class="st">"Volume of waste in cubic yards"</span>, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Count of plastic bottles"</span>, <span class="st">"Count of polystyrene items"</span>, <span class="st">"Count of cigarette butts"</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Count of plastic bags"</span>, <span class="st">"Count of wrappers"</span>, <span class="st">"Estimated number of homes powered by the waste"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dumpster_data_dict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>               Variable                                    Description
-1              Dumpster                    Identifier for the dumpster
-2                 Month                       Month of data collection
-3                  Year                        Year of data collection
-4                  Date                        Date of data collection
-5         Weight (tons)                        Weight of waste in tons
-6  Volume (cubic yards)                 Volume of waste in cubic yards
-7       Plastic Bottles                       Count of plastic bottles
-8           Polystyrene                     Count of polystyrene items
-9       Cigarette Butts                       Count of cigarette butts
-10         Plastic Bags                          Count of plastic bags
-11             Wrappers                              Count of wrappers
-12       Homes Powered* Estimated number of homes powered by the waste</code></pre>
-</div>
-</div>
-</section>
-<section id="question" class="level3">
-<h3 class="anchored" data-anchor-id="question">Question</h3>
-</section>
-<section id="data-processing" class="level3">
-<h3 class="anchored" data-anchor-id="data-processing">Data Processing</h3>
-<ol start="3" type="1">
-<li>Your analysis must include some minimal form of data wrangling with you using at least five different functions from <code>dplyr</code> or <code>tidyr</code>.</li>
-</ol>
-</section>
-<section id="methods" class="level3">
-<h3 class="anchored" data-anchor-id="methods">Methods</h3>
-<ol start="3" type="1">
-<li>Methods:
-<ul>
-<li><p>Your analysis must include one image or table (not one you created yourself, but one you have saved locally or one from the web).</p></li>
-<li><p>Your analysis must include at least two different <a href="https://quarto.org/docs/authoring/callouts.html">callout blocks</a>.</p></li>
-<li><p>Your analysis must include the use of at least 1 <a href="https://quarto.org/docs/authoring/article-layout.html#margin-content">margin content</a>.</p></li>
-</ul></li>
-</ol>
-</section>
-<section id="exploratory-data-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h3>
-<ol start="3" type="1">
-<li><ul>
-<li><p>Your analysis should include at least three plots with you using at least three different <code>geom_*()</code> functions from <code>ggplot2</code> (or another package with <code>geom_*()</code> functions).</p></li>
-<li><p>Plots should have titles, subtitles, captions, and human-understandable axis labels.</p></li>
-<li><p>At least one plot should using a type of faceting (<code>facet_grid()</code> or <code>facet_wrap()</code>).</p></li>
-</ul></li>
-<li>List of functions: At the end of the data analysis, list out each of the functions you used from each of the packages (<code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code>) to help the TA with respect to making sure you met all the requirements described above.</li>
-</ol>
-</section>
-<section id="discussion" class="level3">
-<h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
-<ol start="3" type="1">
-<li>You must summarize your analysis and/or results with a paragraph (4-6 sentences).</li>
-</ol>
 
 
 
@@ -301,6 +648,12 @@ Audience
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-dataset" class="csl-entry" role="listitem">
 Initiative, Healthy Harbor Waterfront Partner. 2024. <em>Trash Wheel Collection Data</em>. <a href="https://docs.google.com/spreadsheets/d/1b8Lbe-z3PNb3H8nSsSjrwK2B0ReAblL2/edit?gid=1143432795#gid=1143432795">https://docs.google.com/spreadsheets/d/1b8Lbe-z3PNb3H8nSsSjrwK2B0ReAblL2/edit?gid=1143432795#gid=1143432795</a>.
+</div>
+<div id="ref-mrtrashwheel" class="csl-entry" role="listitem">
+Mr. Trash Wheel. 2024. <span>“Mr. Trash Wheel.”</span> <a href="https://www.mrtrashwheel.com">https://www.mrtrashwheel.com</a>.
+</div>
+<div id="ref-gavin2014gam" class="csl-entry" role="listitem">
+Simpson, Gavin. 2014. <span>“Modelling Seasonal Data with <span>GAM</span>.”</span> <a href="https://fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/">https://fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/</a>.
 </div>
 <div id="ref-source" class="csl-entry" role="listitem">
 <span>“Waterfront Partner Initiative.”</span> 2024. <a href="https://www.mrtrashwheel.com/trash-interception">https://www.mrtrashwheel.com/trash-interception</a>.
